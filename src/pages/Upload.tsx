@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { uploadFile } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
 import { Progress } from '@/components/ui/progress';
-import { Upload as UploadIcon } from 'lucide-react';
+import { Upload as UploadIcon, ArrowLeft } from 'lucide-react';
 
 export default function Upload() {
   const [isDragging, setIsDragging] = useState(false);
@@ -69,6 +69,14 @@ export default function Upload() {
       }}
       onDrop={handleDrop}
     >
+      <Button
+        variant="ghost"
+        onClick={() => navigate('/dashboard')}
+        className="absolute top-4 left-4 text-white hover:bg-white/10"
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back
+      </Button>
       <div className={`w-full h-full flex flex-col items-center justify-center rounded-2xl backdrop-blur-xl ${
         isDragging ? 'bg-primary/20' : 'bg-white/10'
       } border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300`}>
@@ -94,12 +102,6 @@ export default function Upload() {
           >
             <UploadIcon className="mr-2 h-4 w-4" />
             Choose File
-          </Button>
-          <Button
-            className="block bg-gradient-to-r from-blue-500/80 to-blue-600/80 hover:from-blue-600/90 hover:to-blue-700/90 backdrop-blur-sm"
-            onClick={() => navigate('/dashboard')}
-          >
-            Back to Dashboard
           </Button>
         </div>
       </div>
