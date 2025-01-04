@@ -8,11 +8,14 @@ const API_BASE_URL = 'http://20.199.72.234:8000';
 
 /**
  * Create a base Axios instance with default settings.
- * We won't set headers globally here because
- * different endpoints need different headers.
  */
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: false, // This is important for CORS
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json',
+  },
 });
 
 export const authenticate = async (frontendKey: string) => {
@@ -21,6 +24,7 @@ export const authenticate = async (frontendKey: string) => {
     const response = await api.post('/auth', null, {
       headers: {
         'Frontend-Key': frontendKey,
+        'Access-Control-Allow-Origin': '*',
       },
     });
     return response.data;
@@ -35,6 +39,7 @@ export const getAvailableRaspberry = async () => {
     const response = await api.get('/available-raspberry', {
       headers: {
         'Frontend-Key': localStorage.getItem('frontendMasterKey'),
+        'Access-Control-Allow-Origin': '*',
       },
     });
     return response.data;
@@ -64,6 +69,10 @@ export const uploadFile = async (file: File) => {
     // Create the axios instance with the resolved values
     const newapi = axios.create({
       baseURL: raspberry_url,
+      withCredentials: false,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     // Make the POST request
@@ -72,6 +81,7 @@ export const uploadFile = async (file: File) => {
         'Content-Type': 'multipart/form-data',
         'X-Secure-Key': raspberry_key,
         "File-Name": filaName,
+        'Access-Control-Allow-Origin': '*',
       },
       onUploadProgress: (progressEvent) => {
         const total = progressEvent.total ?? 1;
@@ -92,6 +102,7 @@ export const listFiles = async () => {
     const response = await api.get('/files', {
       headers: {
         'Frontend-Key': localStorage.getItem('frontendMasterKey'),
+        'Access-Control-Allow-Origin': '*',
       },
     });
     return response.data;
@@ -107,12 +118,17 @@ export const deleteFile = async (fileName: string, raspberryId: string) => {
     
     const newapi = axios.create({
       baseURL: raspberry_url,
+      withCredentials: false,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     const response = await newapi.delete(`/delete`, {
       headers: {
         'X-Secure-Key': raspberry_key,
         'File-Name': fileName,
+        'Access-Control-Allow-Origin': '*',
       },
     });
 
@@ -130,6 +146,7 @@ export const getRaspberryURL = async (raspberryId: string) => {
       headers: {
         'Frontend-Key': localStorage.getItem('frontendMasterKey'),
         'Raspberry-Id': raspberryId,
+        'Access-Control-Allow-Origin': '*',
       },
     });
     return response.data;
@@ -148,12 +165,17 @@ export const downloadFile = async (
 
     const newapi = axios.create({
       baseURL: raspberry_url,
+      withCredentials: false,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
     });
 
     const response = await newapi.get(`/download`, {
       headers: {
         'X-Secure-Key': raspberry_key,
         'File-Name': fileName,
+        'Access-Control-Allow-Origin': '*',
       },
       responseType: 'blob',
     });
@@ -163,12 +185,12 @@ export const downloadFile = async (
 
     // Create a link element
     const link = document.createElement('a');
-    link.href = url; // Set the href to the blob URL
-    link.download = fileName; // Set the download attribute to the file name
-    document.body.appendChild(link); // Append the link to the DOM (required for Firefox)
-    link.click(); // Trigger the download
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
 
-    // Clean up by revoking the object URL and removing the link
+    // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(link);
 
