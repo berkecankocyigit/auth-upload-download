@@ -87,13 +87,6 @@ export const uploadFile = async (file: File) => {
   }
 };
 
-/**
- * 3. LIST FILES
- * 
- *   - FastAPI route:  /files
- *   - Python expects: frontend_key in the header
- *   => Send `Frontend-Key: <FRONTEND_MASTER_KEY>`
- */
 export const listFiles = async () => {
   try {
     const response = await api.get('/files', {
@@ -108,12 +101,27 @@ export const listFiles = async () => {
   }
 };
 
-/**
- * 4. DOWNLOAD FILE
- * 
- *   - FastAPI route:  /download/{file_name}
- *   - Python expects: x_raspberry_id & x_secure_key in headers
- */
+export const deleteFile = async (fileName: string, raspberryId: string) => {
+  try {
+    const { raspberry_url, raspberry_key } = await getRaspberryURL(raspberryId);
+    
+    const newapi = axios.create({
+      baseURL: raspberry_url,
+    });
+
+    const response = await newapi.delete(`/delete`, {
+      headers: {
+        'X-Secure-Key': raspberry_key,
+        'File-Name': fileName,
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Delete failed');
+  }
+};
 
 export const getRaspberryURL = async (raspberryId: string) => {
   console.log(raspberryId);
