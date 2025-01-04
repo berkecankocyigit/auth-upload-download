@@ -16,10 +16,11 @@ const api = axios.create({
 });
 
 export const authenticate = async (frontendKey: string) => {
+  console.log(frontendKey);
   try {
     const response = await api.post('/auth', null, {
       headers: {
-        'Frontend-Master-Key': frontendKey,
+        'Frontend-Key': frontendKey,
       },
     });
     return response.data;
