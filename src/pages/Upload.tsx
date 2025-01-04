@@ -42,22 +42,21 @@ export default function Upload() {
         setIsDragging(true);
       }}
       onDragLeave={(e) => {
-        // Only set dragging to false if we're leaving the main container
         if (e.currentTarget === e.target) {
           setIsDragging(false);
         }
       }}
       onDrop={handleDrop}
     >
-      <div className={`w-full h-full flex flex-col items-center justify-center border-2 border-dashed rounded-lg transition-colors ${
-        isDragging ? 'border-primary bg-primary/10' : 'border-gray-300'
-      }`}>
-        <p className="text-lg mb-4">Drag and drop your file anywhere on this page</p>
+      <div className={`w-full h-full flex flex-col items-center justify-center rounded-2xl backdrop-blur-xl ${
+        isDragging ? 'bg-primary/20' : 'bg-white/10'
+      } border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300`}>
+        <p className="text-lg mb-4 text-gray-900 dark:text-white">Drag and drop your file anywhere on this page</p>
         {uploadProgress > 0 && (
           <Progress value={uploadProgress} className="w-1/2 mx-auto" />
         )}
         <Button
-          className="mt-4"
+          className="mt-4 bg-gradient-to-r from-blue-500/80 to-blue-600/80 hover:from-blue-600/90 hover:to-blue-700/90 backdrop-blur-sm"
           onClick={() => navigate('/dashboard')}
         >
           Back to Dashboard
