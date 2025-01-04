@@ -1,17 +1,10 @@
 import axios from 'axios';
 
-/**
- * Your FastAPI is at http://localhost:8000 by default.
- * Adjust this if your server is elsewhere.
- */
 const API_BASE_URL = 'http://20.199.72.234:8000';
 
-/**
- * Create a base Axios instance with default settings.
- */
 const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: false, // This is important for CORS
+  withCredentials: false,
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
@@ -49,7 +42,7 @@ export const getAvailableRaspberry = async () => {
   }
 }
 
-export const uploadFile = async (file: File) => {
+export const uploadFile = async (file: File, onProgress?: (progress: number) => void) => {
   const formData = new FormData();
   formData.append('file', file);
   let filaName = file.name;
@@ -61,12 +54,10 @@ export const uploadFile = async (file: File) => {
       throw new Error('No frontend key found. Please login again.');
     }
 
-    // Wait for the getAvailableRaspberry promise to resolve
     const { raspberry_url, raspberry_key } = await getAvailableRaspberry();
     console.log(raspberry_url);
     console.log(raspberry_key);
     
-    // Create the axios instance with the resolved values
     const newapi = axios.create({
       baseURL: raspberry_url,
       withCredentials: false,
@@ -75,7 +66,6 @@ export const uploadFile = async (file: File) => {
       },
     });
 
-    // Make the POST request
     const response = await newapi.post(`/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -87,6 +77,7 @@ export const uploadFile = async (file: File) => {
         const total = progressEvent.total ?? 1;
         const percentCompleted = Math.round((progressEvent.loaded * 100) / total);
         console.log(`Upload Progress: ${percentCompleted}%`);
+        onProgress?.(percentCompleted);
       },
     });
 
@@ -180,17 +171,12 @@ export const downloadFile = async (
       responseType: 'blob',
     });
 
-    // Create a URL for the blob
     const url = window.URL.createObjectURL(new Blob([response.data]));
-
-    // Create a link element
     const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
-
-    // Clean up
     window.URL.revokeObjectURL(url);
     document.body.removeChild(link);
 
