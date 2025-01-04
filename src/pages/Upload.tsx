@@ -69,14 +69,10 @@ export default function Upload() {
       }}
       onDrop={handleDrop}
     >
-      <Button
-        variant="ghost"
+      <ArrowLeft
+        className="fixed top-4 left-4 text-white w-6 h-6 cursor-pointer"
         onClick={() => navigate('/dashboard')}
-        className="fixed top-4 left-4 text-white hover:bg-white/10"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back
-      </Button>
+      />
       <div className={`w-full h-full flex flex-col items-center justify-center rounded-2xl backdrop-blur-xl ${
         isDragging ? 'bg-primary/20' : 'bg-white/10'
       } border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] transition-all duration-300`}>
