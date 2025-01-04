@@ -7,35 +7,21 @@ import axios from 'axios';
 const API_BASE_URL = 'http://20.199.72.234:8000';
 
 /**
- * This is the key your frontend uses to authenticate to routes expecting `frontend_key`.
- * In Python, your route definitions look like:
- *   @app.post("/auth")
- *   async def frontend_auth(frontend_key: str = Header(...)):
- * which expects the header name "Frontend-Key".
- */
-const FRONTEND_MASTER_KEY = 'palpatine-somehow-returned';
-
-/**
  * Create a base Axios instance with default settings.
  * We won't set headers globally here because
  * different endpoints need different headers.
- * 
- 
  */
-
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-
-export const authenticate = async () => {
+export const authenticate = async (frontendKey: string) => {
   try {
     const response = await api.post('/auth', null, {
       headers: {
-        'Frontend-Key': FRONTEND_MASTER_KEY,
+        'Frontend-Master-Key': frontendKey,
       },
     });
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -43,12 +29,11 @@ export const authenticate = async () => {
   }
 };
 
-
 export const getAvailableRaspberry = async () => {
   try {
     const response = await api.get('/available-raspberry', {
       headers: {
-        'Frontend-Key': FRONTEND_MASTER_KEY,
+        'Frontend-Key': localStorage.getItem('frontendMasterKey'),
       },
     });
     return response.data;
@@ -57,6 +42,7 @@ export const getAvailableRaspberry = async () => {
     throw new Error('Failed to fetch files');
   }
 }
+
 export const uploadFile = async (file: File) => {
   const formData = new FormData();
   formData.append('file', file);
@@ -64,10 +50,16 @@ export const uploadFile = async (file: File) => {
   console.log(filaName);
 
   try {
+    const frontendKey = localStorage.getItem('frontendMasterKey');
+    if (!frontendKey) {
+      throw new Error('No frontend key found. Please login again.');
+    }
+
     // Wait for the getAvailableRaspberry promise to resolve
     const { raspberry_url, raspberry_key } = await getAvailableRaspberry();
     console.log(raspberry_url);
     console.log(raspberry_key);
+    
     // Create the axios instance with the resolved values
     const newapi = axios.create({
       baseURL: raspberry_url,
@@ -93,6 +85,7 @@ export const uploadFile = async (file: File) => {
     throw new Error('Upload failed');
   }
 };
+
 /**
  * 3. LIST FILES
  * 
@@ -104,7 +97,7 @@ export const listFiles = async () => {
   try {
     const response = await api.get('/files', {
       headers: {
-        'Frontend-Key': FRONTEND_MASTER_KEY,
+        'Frontend-Key': localStorage.getItem('frontendMasterKey'),
       },
     });
     return response.data;
@@ -126,7 +119,7 @@ export const getRaspberryURL = async (raspberryId: string) => {
   try {
     const response = await api.get(`/get_raspberry`, {
       headers: {
-        'Frontend-Key': FRONTEND_MASTER_KEY,
+        'Frontend-Key': localStorage.getItem('frontendMasterKey'),
         'Raspberry-Id': raspberryId,
       },
     });
@@ -136,7 +129,6 @@ export const getRaspberryURL = async (raspberryId: string) => {
     throw new Error('Failed to fetch files');
   }
 }
-
 
 export const downloadFile = async (
   fileName: string,

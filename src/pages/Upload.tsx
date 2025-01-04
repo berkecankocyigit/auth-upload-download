@@ -35,29 +35,29 @@ export default function Upload() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="w-full max-w-2xl space-y-8">
-        <h1 className="text-2xl font-bold text-center">Upload Files</h1>
-        
-        <div
-          className={`border-2 border-dashed rounded-lg p-12 text-center ${
-            isDragging ? 'border-primary bg-primary/10' : 'border-gray-300'
-          }`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-        >
-          <p className="text-lg">Drag and drop your file here</p>
-          {uploadProgress > 0 && (
-            <Progress value={uploadProgress} className="mt-4" />
-          )}
-        </div>
-
+    <div
+      className="fixed inset-0 flex items-center justify-center p-4"
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDragging(true);
+      }}
+      onDragLeave={(e) => {
+        // Only set dragging to false if we're leaving the main container
+        if (e.currentTarget === e.target) {
+          setIsDragging(false);
+        }
+      }}
+      onDrop={handleDrop}
+    >
+      <div className={`w-full h-full flex flex-col items-center justify-center border-2 border-dashed rounded-lg transition-colors ${
+        isDragging ? 'border-primary bg-primary/10' : 'border-gray-300'
+      }`}>
+        <p className="text-lg mb-4">Drag and drop your file anywhere on this page</p>
+        {uploadProgress > 0 && (
+          <Progress value={uploadProgress} className="w-1/2 mx-auto" />
+        )}
         <Button
-          className="w-full"
+          className="mt-4"
           onClick={() => navigate('/dashboard')}
         >
           Back to Dashboard
