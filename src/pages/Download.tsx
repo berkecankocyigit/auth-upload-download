@@ -26,6 +26,7 @@ export default function Download() {
     try {
       const fileList = await listFiles();
       setFiles(fileList);
+      console.log(fileList);
     } catch (error) {
       toast({
         title: "Error",
@@ -39,7 +40,9 @@ export default function Download() {
 
   const handleDownload = async (fileName: string) => {
     try {
-      await downloadFile(fileName);
+      console.log(fileName);
+      console.log(files);
+      await downloadFile(fileName, files[fileName]);
       toast({
         title: "Success",
         description: "Download started",
