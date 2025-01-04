@@ -45,7 +45,7 @@ export default function Login() {
             placeholder="Enter frontend master key"
             value={masterKey}
             onChange={(e) => setMasterKey(e.target.value)}
-            className="bg-white/5 border-white/10 backdrop-blur-sm"
+            className="bg-white/5 border-[#1A1F2C] dark:border-[#403E43] backdrop-blur-sm focus:border-primary/50 focus:ring-primary/50"
           />
           <Button
             className="w-full bg-gradient-to-r from-blue-500/80 to-blue-600/80 hover:from-blue-600/90 hover:to-blue-700/90 backdrop-blur-sm"
