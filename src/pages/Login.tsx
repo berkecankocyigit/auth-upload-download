@@ -36,8 +36,8 @@ export default function Login() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8 p-8 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome</h1>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">Please enter your frontend master key to continue</p>
+          <h1 className="text-2xl font-bold text-white">Welcome</h1>
+          <p className="mt-2 text-white/80">Please enter your frontend master key to continue</p>
         </div>
         <div className="space-y-4">
           <Input
