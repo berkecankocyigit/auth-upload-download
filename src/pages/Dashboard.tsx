@@ -9,8 +9,8 @@ export default function Dashboard() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8 p-8 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)]">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-          <p className="text-gray-500 dark:text-gray-400">Choose an option to proceed</p>
+          <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+          <p className="text-white/80">Choose an option to proceed</p>
         </div>
         
         <div className="grid gap-4">
